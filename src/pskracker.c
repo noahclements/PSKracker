@@ -28,7 +28,6 @@
 #include "pskracker.h"
 #include "version.h"
 
-#include "att.c"
 #include "belkin.c"
 #include "xfinity.c"
 #include "tools.c"
@@ -84,28 +83,8 @@ void bruteforce(char *target, uint8_t mode, uint8_t guest, uint8_t force, uint8_
 	/* WPA */
 	if(mode == 0) {
 		if(force)  {
-			/* All ATT */
-			if(!strcmp(STR_ISP_ATT, target)) {
-				int i;
-				unsigned char psk[ATT_NVG5XX_PSK_LEN];
-				for (i = 0; i < INT_MAX; i++) {
-					genpass589(i, psk);
-					printf("%s\n", psk);
-					genpass599(i, psk);
-					printf("%s\n", psk);
-				}
-			}
-			/* All Belkin */
-			else if(!strcmp(STR_MANUF_BELKIN, target)) {
-				if(pMac != NULL) {	
-					genpassBelkinOld(pMac);
-				}
-				else {
-                                	specify_bssid(target);
-				}
-			}
 			/* All Comcast/Xfinity */
-			else if(!strcmp(STR_ISP_XFINITY, target) || !strcmp(STR_ISP_COMCAST, target)) {
+			if(!strcmp(STR_ISP_XFINITY, target) || !strcmp(STR_ISP_COMCAST, target)) {
 				if(pMac != NULL) {
                                         printf("PSK: %s\n", genpassXHS(pMac));
                                 }
@@ -118,26 +97,9 @@ void bruteforce(char *target, uint8_t mode, uint8_t guest, uint8_t force, uint8_
 			exit(0);
 		}
 		else {
-			/* ATT NVG589 */
-			if(!strcmp(STR_MODEL_NVG589, target)) {
-				int i;
-				unsigned char psk[ATT_NVG5XX_PSK_LEN];
-				for (i = 0; i < INT_MAX; i++) {
-					genpass589(i, psk);
-					printf("%s\n", psk);
-				}
-			}
-			/* ATT NVG599 */
-			else if(!strcmp(STR_MODEL_NVG599, target)) {
-				int i;
-				unsigned char psk[ATT_NVG5XX_PSK_LEN];
-				for (i = 0; i < INT_MAX; i++) {
-					genpass599(i, psk);
-					printf("%s\n", psk);
-				}
-			}
+			
 			/* Comcast/Xfinity Home Security DPC3939, DPC3491, TG1682G */
-			else if (!strcmp(STR_MODEL_DPC3939, target) || !strcmp(STR_MODEL_DPC3941, target) || !strcmp(STR_MODEL_TG1682G, target)) {
+			if (!strcmp(STR_MODEL_DPC3939, target) || !strcmp(STR_MODEL_DPC3941, target) || !strcmp(STR_MODEL_TG1682G, target)) {
 				if(pMac != NULL) {
 					printf("PSK: %s\n", genpassXHS(pMac));
 				}
